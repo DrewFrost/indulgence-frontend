@@ -1,0 +1,20 @@
+{
+  "files": {
+    "src/App.jsx": [
+      {
+        "id": "083c21d6-eb14-4753-b1f2-1d98619060e7",
+        "line": 117,
+        "version": 4698,
+        "index": 3304
+      }
+    ],
+    "src/index.css": [
+      {
+        "id": "bb1bcd19-d60e-47dd-b578-928db675bb37",
+        "line": 1,
+        "version": 212,
+        "index": 0
+      }
+    ]
+  }
+}

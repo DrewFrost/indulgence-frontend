@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.7;
+  color: gray;
+  background: url(assets/images/body-bg.png) repeat fixed;
+}

@@ -1,0 +1,8 @@
+h1 {
+    font-family: "Poppins",Arial,sans-serif;
+    font-size: 60px;
+    text-shadow: rgb(245, 244, 238) 1px 0 10px;
+    color: rgb(221, 218, 218);
+    line-height: 2;
+    font-weight: 500;
+}
