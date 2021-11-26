@@ -5,7 +5,7 @@ import abi from './utils/IndulgencePortal.json';
 import moment from 'moment';
 
 export default function App() {
-  const contractAddress = '0xd0B887FB8CB6afaB332161fAc8C1B99956e153a6';
+  const contractAddress = '0x890bC1a976C622E9AC25ea4f5551c784B3d6e53e';
   const contractABI = abi.abi;
   const [currentAccount, setCurrentAccount] = useState('');
   const [mining, setMining] = useState(false);
@@ -108,10 +108,10 @@ export default function App() {
           contractABI,
           signer
         );
-        const indulgeTxn = await indulgencePortalContract.indulgeTheSin(sin);
+        const confessTxn = await indulgencePortalContract.confess(sin);
         setMining(true);
         setSin('');
-        await indulgeTxn.wait();
+        await confessTxn.wait();
         setMining(false);
         getAllSinners();
       } else {
@@ -147,7 +147,7 @@ export default function App() {
               disabled={mining}
               className="group relative w-full flex justify-center py-2 my-8 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-white-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white-500"
             >
-              Indulge your sin
+              Confess
             </button>
           </>
         )}
