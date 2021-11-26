@@ -3,9 +3,11 @@ import { ethers } from 'ethers';
 import './App.css';
 import abi from './utils/IndulgencePortal.json';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 export default function App() {
-  const contractAddress = '0x890bC1a976C622E9AC25ea4f5551c784B3d6e53e';
+  const contractAddress = '0xfE4b62e83D3C71b496bC58Ea260FC1bFc17C23fE';
   const contractABI = abi.abi;
   const [currentAccount, setCurrentAccount] = useState('');
   const [mining, setMining] = useState(false);
@@ -79,13 +81,13 @@ export default function App() {
         );
         const sins = await indulgencePortalContract.getAllSins();
         var addSins = [];
-        for (var i = 0; i < sins.message.length; i++) {
+        sins.forEach((sin) => {
           addSins.push({
-            address: transformAddress(sins.sinner[i]),
-            message: sins.message[i],
-            timestamp: new Date(sins.timestamp[i] * 1000),
+            address: transformAddress(sin.sinner),
+            message: sin.sin,
+            timestamp: new Date(sin.timestamp * 1000),
           });
-        }
+        });
         addSins.sort((a, b) => b.timestamp - a.timestamp);
         setSinners(addSins);
       } else {
@@ -124,6 +126,9 @@ export default function App() {
 
   return (
     <div>
+      <a className="mx-8" href="https://github.com/DrewFrost">
+        <FontAwesomeIcon icon={faGithub} />
+      </a>
       <div className="container flex flex-wrap justify-center max-w-md">
         <h1 className="text-center">Come and tell us your sins!</h1>
         {!currentAccount ? (
