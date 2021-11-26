@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 export default function App() {
-  const contractAddress = '0x556d20c2D9BDf357321cA72A7755EF300475e9a6';
+  const contractAddress = '0xC8718FC542c020Cad96778a69f884bd9C7cAC821';
   const contractABI = abi.abi;
   const [currentAccount, setCurrentAccount] = useState('');
   const [mining, setMining] = useState(false);
