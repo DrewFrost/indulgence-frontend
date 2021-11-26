@@ -5,7 +5,7 @@ import abi from './utils/IndulgencePortal.json';
 import moment from 'moment';
 
 export default function App() {
-  const contractAddress = '0xd77F1f9510913c7Db7A5CF78Ab6E65faB66dd73B';
+  const contractAddress = '0xd0B887FB8CB6afaB332161fAc8C1B99956e153a6';
   const contractABI = abi.abi;
   const [currentAccount, setCurrentAccount] = useState('');
   const [mining, setMining] = useState(false);
@@ -15,10 +15,6 @@ export default function App() {
   useEffect(async () => {
     checkIfWalletIsConnected();
   }, []);
-
-  useEffect(() => {
-    console.log('hooks', sinners);
-  }, [sinners]);
 
   const checkIfWalletIsConnected = async () => {
     /*
@@ -82,13 +78,16 @@ export default function App() {
           signer
         );
         const sins = await indulgencePortalContract.getAllSins();
-        console.log(sins);
-        sins.map((sin) => {
-          console.log('%s', sin);
-        });
-
-        // addSins.sort((a, b) => b.timestamps - a.timestamps);
-        // setSinners(addSins);
+        var addSins = [];
+        for (var i = 0; i < sins.message.length; i++) {
+          addSins.push({
+            address: transformAddress(sins.sinner[i]),
+            message: sins.message[i],
+            timestamp: sins.timestamp[i],
+          });
+        }
+        addSins.sort((a, b) => b.timestamps - a.timestamps);
+        setSinners(addSins);
       } else {
         console.log("Ethereum object doesn't exist!");
       }
@@ -110,12 +109,10 @@ export default function App() {
           signer
         );
         const indulgeTxn = await indulgencePortalContract.indulgeTheSin(sin);
-        console.log('Mining...', indulgeTxn.hash);
         setMining(true);
         setSin('');
         await indulgeTxn.wait();
         setMining(false);
-        console.log('Mined -- ', indulgeTxn.hash);
         getAllSinners();
       } else {
         console.log("Ethereum object doesn't exist!");
@@ -164,7 +161,7 @@ export default function App() {
             <th className="w-3/5 px-4 py-3 border-r-2 border-gray-400">
               Confession
             </th>
-            <th className="px-4 py-3">Occurence</th>
+            <th className="px-4 py-3">Occured</th>
           </tr>
         </thead>
         <tbody>
@@ -178,7 +175,7 @@ export default function App() {
                   {sinner.message}
                 </td>
                 <td className="px-4 py-3 text-center">
-                  {moment(sinner.timestamp).calendar()}
+                  {moment(sinner.timestamp).fromNow()}
                 </td>
               </tr>
             );
