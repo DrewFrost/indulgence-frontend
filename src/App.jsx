@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 export default function App() {
-  const contractAddress = '0xfE4b62e83D3C71b496bC58Ea260FC1bFc17C23fE';
+  const contractAddress = '0x556d20c2D9BDf357321cA72A7755EF300475e9a6';
   const contractABI = abi.abi;
   const [currentAccount, setCurrentAccount] = useState('');
   const [mining, setMining] = useState(false);
@@ -16,6 +16,47 @@ export default function App() {
 
   useEffect(async () => {
     checkIfWalletIsConnected();
+  }, []);
+
+  const transformAddress = (str) => {
+    return `${str.substring(0, 6)}...${str.substring(
+      str.length - 6,
+      str.length
+    )}`;
+  };
+
+  useEffect(() => {
+    let indulgencePortalContract;
+
+    const onNewSin = (from, timestamp, message) => {
+      console.log('NewSin', from, timestamp, message);
+      setSinners((prevState) => [
+        {
+          address: transformAddress(from),
+          timestamp: new Date(timestamp * 1000),
+          message: message,
+        },
+        ...prevState
+      ]);
+    };
+
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      indulgencePortalContract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+      indulgencePortalContract.on('NewSin', onNewSin);
+    }
+
+    return () => {
+      if (indulgencePortalContract) {
+        indulgencePortalContract.off('NewSin', onNewSin);
+      }
+    };
   }, []);
 
   const checkIfWalletIsConnected = async () => {
@@ -61,13 +102,6 @@ export default function App() {
     }
   };
 
-  const transformAddress = (str) => {
-    return `${str.substring(0, 6)}...${str.substring(
-      str.length - 6,
-      str.length
-    )}`;
-  };
-
   const getAllSinners = async () => {
     try {
       const { ethereum } = window;
@@ -110,12 +144,13 @@ export default function App() {
           contractABI,
           signer
         );
-        const confessTxn = await indulgencePortalContract.confess(sin);
+        const confessTxn = await indulgencePortalContract.confess(sin, {
+          gasLimit: 300000,
+        });
         setMining(true);
         setSin('');
         await confessTxn.wait();
         setMining(false);
-        getAllSinners();
       } else {
         console.log("Ethereum object doesn't exist!");
       }
