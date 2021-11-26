@@ -83,10 +83,10 @@ export default function App() {
           addSins.push({
             address: transformAddress(sins.sinner[i]),
             message: sins.message[i],
-            timestamp: sins.timestamp[i],
+            timestamp: new Date(sins.timestamp[i] * 1000),
           });
         }
-        addSins.sort((a, b) => b.timestamps - a.timestamps);
+        addSins.sort((a, b) => b.timestamp - a.timestamp);
         setSinners(addSins);
       } else {
         console.log("Ethereum object doesn't exist!");
@@ -175,7 +175,7 @@ export default function App() {
                   {sinner.message}
                 </td>
                 <td className="px-4 py-3 text-center">
-                  {moment(sinner.timestamp).fromNow()}
+                  {moment(sinner.timestamp).calendar()}
                 </td>
               </tr>
             );
